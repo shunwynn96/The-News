@@ -9,7 +9,7 @@ category={catagoryName}
 */
 
 axios.defaults.params = {
-  apikey: import.meta.env.VITE_GNEWS_0,
+  apikey: import.meta.env.VITE_GNEWS_1,
 };
 
 export const getTopHeadlines = (params) => {

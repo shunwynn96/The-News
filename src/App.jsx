@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { CssVarsProvider, useColorScheme } from "@mui/joy/styles";
 import Home from "./components/Home";
-import { Box, Sheet } from "@mui/joy";
 import Button from "@mui/joy/Button";
 import { getTopHeadlines } from "./api/gnews.js";
 import "./App.css";

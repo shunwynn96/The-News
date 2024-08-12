@@ -5,7 +5,7 @@ import LocationOnRoundedIcon from "@mui/icons-material/LocationOnRounded";
 const HeadlineCard = (props) => {
   return (
     <>
-      <Card sx={{ height: "276px", minWidth: "700px" }}>
+      <Card sx={{ height: "276px" }}>
         <CardCover>
           <img src={props.articleImage} loading="lazy" alt="article image" />
         </CardCover>
