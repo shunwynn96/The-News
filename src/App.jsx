@@ -45,9 +45,14 @@ export function ModeToggle() {
 const App = () => {
   const [articles, setArticles] = useState([]);
 
+  /* ========== local newsData ========== */
   useEffect(() => {
     setArticles(newsData);
   }, []);
+
+  /* ==================================== */
+
+  /* ========== API news Data ========== */
 
   // const getTopHeadlineData = () => {
   //   getTopHeadlines().then((res) => {
@@ -58,6 +63,8 @@ const App = () => {
   // useEffect(() => {
   //   getTopHeadlineData();
   // }, []);
+
+  /* ==================================== */
 
   return (
     <>
