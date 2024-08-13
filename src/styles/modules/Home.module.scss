@@ -15,62 +15,46 @@
       font-size: 20px;
       font-weight: 600;
       margin-bottom: 6px;
-  
     }
-    & .chip {
-      padding: 0 10px;
-      & svg {
-        font-size: 18px;
-      }
-    }
+  }
+}
+
+.chip {
+  margin: 20px 10px 0 0;
+  padding: 0 10px;
+  & svg {
+    font-size: 18px;
   }
 }
 
 .homeBody {
   display: flex;
   flex-direction: column;
-  padding: 20px 10px;
+  padding: 20px 0;
   margin: auto;
   justify-content: center;
   align-items: center;
+
   & .headline {
     display: flex;
     margin: 0px auto 20px auto;
-
-    & .description {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: space-between;
-      height: 210px;
-      padding: 40px;
-      width: 410px;
-      align-self: center;
-      font-size: 16px;
-    }
-
-    & .linkButton {
-      margin-top: 40px;
-      width: 100%;
-
-      & a {
-        text-decoration: none;
-        color: unset;
-        font-size: unset;
-      }
-    }
-
   }
   & .articleCards {
     display: grid;
-    // box-sizing: border-box;
     width: 100%;
     margin: 0 auto;
-    // grid-column: auto;
-    justify-content: center;
-    justify-items: center;
-    grid-template-columns: repeat(auto-fit, minmax(352px, 352px));
-    gap: 25px;
+    grid-template-columns: repeat(4, auto);
+    gap: 1rem;
+
+    @media (max-width: 1000px) {
+      grid-template-columns: repeat(3, auto);
+    }
+    @media (max-width: 800px) {
+      grid-template-columns: repeat(2, auto);
+    }
+    @media (max-width: 550px) {
+      grid-template-columns: repeat(1, auto);
+    }
   }
 
  

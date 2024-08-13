@@ -11,11 +11,7 @@ import style from "../../styles/modules/SmallArticleCard.module.scss";
 const SmallArticleCard = (props) => {
   return (
     <>
-      <Card
-        className={style.smallArticleCard}
-        variant="outlined"
-        sx={{ width: 320 }}
-      >
+      <Card className={style.smallArticleCard} variant="outlined">
         <CardOverflow>
           <AspectRatio ratio="2">
             <img src={props.articleImage} loading="lazy" alt="" />

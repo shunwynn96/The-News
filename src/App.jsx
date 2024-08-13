@@ -2,13 +2,16 @@ import React, { useState, useEffect } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { CssVarsProvider, useColorScheme } from "@mui/joy/styles";
 import Home from "./components/Home";
-import Button from "@mui/joy/Button";
+import DarkMode from "@mui/icons-material/DarkMode";
+import LightMode from "@mui/icons-material/LightMode.js";
+import { Switch } from "@mui/joy";
 import { getTopHeadlines } from "./api/gnews.js";
+import { newsData } from "./api/demoData.js";
 import "./App.css";
 
 import "@fontsource/inter";
 
-function ModeToggle() {
+export function ModeToggle() {
   const { mode, setMode } = useColorScheme();
   const [mounted, setMounted] = useState(false);
   useEffect(() => {
@@ -19,35 +22,47 @@ function ModeToggle() {
   }
 
   return (
-    <Button
-      variant="outlined"
-      onClick={() => {
-        setMode(mode === "light" ? "dark" : "light");
+    <Switch
+      size="lg"
+      slotProps={{
+        input:
+          mode === "light"
+            ? { "aria-label": "Dark mode switch" }
+            : { "aria-label": "Light mode switch" },
+        thumb:
+          mode === "light"
+            ? { children: <DarkMode /> }
+            : { children: <LightMode /> },
       }}
-    >
-      {mode === "light" ? "Turn dark" : "Turn light"}
-    </Button>
+      onChange={() => setMode(mode === "light" ? "dark" : "light")}
+      sx={{
+        "--Switch-thumbSize": "16px",
+      }}
+    />
   );
 }
 
 const App = () => {
   const [articles, setArticles] = useState([]);
 
-  const getTopHeadlineData = () => {
-    getTopHeadlines().then((res) => {
-      setArticles(res.data.articles);
-    });
-  };
-
   useEffect(() => {
-    getTopHeadlineData();
+    setArticles(newsData);
   }, []);
+
+  // const getTopHeadlineData = () => {
+  //   getTopHeadlines().then((res) => {
+  //     setArticles(res.data.articles);
+  //   });
+  // };
+
+  // useEffect(() => {
+  //   getTopHeadlineData();
+  // }, []);
 
   return (
     <>
       <div className="main-container">
         <CssVarsProvider>
-          <ModeToggle />
           <Router>
             <Routes>
               <Route path="/" element={<Home articles={articles} />} />
