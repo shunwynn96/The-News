@@ -8,12 +8,15 @@
   background-color: var(--bg-1);
 }
 
-.main-container { 
-  padding: 10px;
+.main-container {
+  padding: 10px 10px;
+  background-color: var(--bg-1);
+}
+
+.body-container { 
   max-width: 1200px;
   min-height: calc(100% - 20px);
   margin: auto;
-  background-color: var(--bg-1);
 }
 
 :root {

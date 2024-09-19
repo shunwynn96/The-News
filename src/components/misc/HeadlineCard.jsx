@@ -6,12 +6,12 @@ import {
   Typography,
   Button,
   Sheet,
+  Skeleton,
 } from "@mui/joy";
 import LaunchIcon from "@mui/icons-material/Launch";
 import LocationOnRoundedIcon from "@mui/icons-material/LocationOnRounded";
 
 import style from "../../styles/modules/HeadlineCard.module.scss";
-
 const HeadlineCard = (props) => {
   const [screenWidth, setScreenWidth] = useState(window.innerWidth);
 
@@ -25,12 +25,13 @@ const HeadlineCard = (props) => {
       window.removeEventListener("resize", handleResize);
     };
   }, []);
-
   return (
     <>
-      <Card sx={{ height: "276px" }}>
+      <Card sx={{ height: "276px", width: "100%" }}>
         <CardCover>
-          <img src={props.articleImage} loading="lazy" alt="article image" />
+          <Skeleton loading={props.loading} variant="overlay">
+            <img src={props.articleImage} loading="lazy" alt="article image" />
+          </Skeleton>
         </CardCover>
         <CardCover
           sx={{
@@ -40,28 +41,37 @@ const HeadlineCard = (props) => {
         />
         <CardContent sx={{ justifyContent: "flex-end" }}>
           <Typography level="title-lg" textColor="#fff">
-            {props.articleTitle}
+            <Skeleton loading={props.loading}>{props.articleTitle}</Skeleton>
           </Typography>
           <Typography
             startDecorator={<LocationOnRoundedIcon />}
             textColor="neutral.300"
           >
-            {props.articleSource.name}
+            <Skeleton loading={props.loading}>
+              {props.articleSource.name}
+            </Skeleton>
           </Typography>
         </CardContent>
       </Card>
-      {screenWidth > 1200 && (
-        <Sheet className={style.description}>
-          <p>{props.articleContent.split("...", 1)}...</p>
+      {screenWidth > 1100 && (
+        <Sheet variant="soft" className={style.description}>
+          <Typography>
+            <Skeleton loading={props.loading}>
+              {props.articleContent.split("...", 1)}...
+            </Skeleton>
+          </Typography>
+
           <Button
             className={style.linkButton}
             variant="soft"
             endDecorator={<LaunchIcon />}
             color="primary"
           >
-            <a href={props.articleLink} target="_blank">
-              Continue Reading
-            </a>
+            <Skeleton loading={props.loading}>
+              <a href={props.articleLink} target="_blank">
+                Continue Reading
+              </a>
+            </Skeleton>
           </Button>
         </Sheet>
       )}

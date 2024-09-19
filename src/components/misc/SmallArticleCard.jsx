@@ -1,24 +1,28 @@
-import React from "react";
+import React, { useState } from "react";
 import Card from "@mui/joy/Card";
 import CardContent from "@mui/joy/CardContent";
 import Typography from "@mui/joy/Typography";
 import AspectRatio from "@mui/joy/AspectRatio";
 import CardOverflow from "@mui/joy/CardOverflow";
 import Divider from "@mui/joy/Divider";
-
-import style from "../../styles/modules/SmallArticleCard.module.scss";
+import Skeleton from "@mui/joy/Skeleton";
 
 const SmallArticleCard = (props) => {
   return (
     <>
-      <Card className={style.smallArticleCard} variant="outlined">
+      <Card variant="outlined">
         <CardOverflow>
           <AspectRatio ratio="2">
-            <img src={props.articleImage} loading="lazy" alt="" />
+            <Skeleton loading={props.loading} variant="overlay">
+              <img src={props.articleImage} loading="lazy" alt="No Image" />
+            </Skeleton>
           </AspectRatio>
         </CardOverflow>
+
         <CardContent>
-          <Typography level="title-md">{props.articleTitle}</Typography>
+          <Typography level="title-md">
+            <Skeleton loading={props.loading}>{props.articleTitle}</Skeleton>
+          </Typography>
         </CardContent>
         <CardOverflow variant="soft" sx={{ bgcolor: "background.level1" }}>
           <Divider inset="context" />
@@ -28,7 +32,9 @@ const SmallArticleCard = (props) => {
               fontWeight="md"
               textColor="text.secondary"
             >
-              {props.articleSource.name}
+              <Skeleton loading={props.loading}>
+                {props.articleSource.name}
+              </Skeleton>
             </Typography>
             <Divider orientation="vertical" />
             <Typography
@@ -36,7 +42,7 @@ const SmallArticleCard = (props) => {
               fontWeight="md"
               textColor="text.secondary"
             >
-              1 hour ago
+              <Skeleton loading={props.loading}>1 hour ago</Skeleton>
             </Typography>
           </CardContent>
         </CardOverflow>
