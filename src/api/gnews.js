@@ -29,9 +29,7 @@ export const getCategory = (params) => {
 };
 export const getSearch = (params) => {
   return axios.request({
-    url: `https://gnews.io/api/v4/search?country=us&q=${
-      store.state.search_query
-    }&apikey=${process.env[key_list[key_num.value]]}`,
+    url: `https://gnews.io/api/v4/search?country=us`,
     method: "get",
     params: params,
   });

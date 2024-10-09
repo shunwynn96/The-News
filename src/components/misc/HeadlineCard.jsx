@@ -9,7 +9,6 @@ import {
   Skeleton,
 } from "@mui/joy";
 import LaunchIcon from "@mui/icons-material/Launch";
-import LocationOnRoundedIcon from "@mui/icons-material/LocationOnRounded";
 
 import style from "../../styles/modules/HeadlineCard.module.scss";
 const HeadlineCard = (props) => {
@@ -44,11 +43,19 @@ const HeadlineCard = (props) => {
             <Skeleton loading={props.loading}>{props.articleTitle}</Skeleton>
           </Typography>
           <Typography
-            startDecorator={<LocationOnRoundedIcon />}
+            style={{ display: "flex", alignItems: "center" }}
             textColor="neutral.300"
           >
             <Skeleton loading={props.loading}>
-              {props.articleSource.name}
+              <img
+                style={{ marginRight: "10px", marginTop: "5px" }}
+                src={`https://s2.googleusercontent.com/s2/favicons?domain_url=${
+                  props.articleSource.url
+                }&sz=${20}`}
+              />
+              <a className={style.links} href={props.articleSource.url}>
+                {props.articleSource.name}
+              </a>
             </Skeleton>
           </Typography>
         </CardContent>

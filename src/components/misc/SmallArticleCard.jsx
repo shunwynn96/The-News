@@ -7,6 +7,7 @@ import CardOverflow from "@mui/joy/CardOverflow";
 import Divider from "@mui/joy/Divider";
 import Skeleton from "@mui/joy/Skeleton";
 
+import style from "../../styles/modules/SmallArticleCard.module.scss";
 const SmallArticleCard = (props) => {
   return (
     <>
@@ -21,19 +22,34 @@ const SmallArticleCard = (props) => {
 
         <CardContent>
           <Typography level="title-md">
-            <Skeleton loading={props.loading}>{props.articleTitle}</Skeleton>
+            <Skeleton loading={props.loading}>
+              <a
+                className={style.links}
+                href={props.articleLink}
+                target="_blank"
+              >
+                {props.articleTitle}
+              </a>
+            </Skeleton>
           </Typography>
         </CardContent>
         <CardOverflow variant="soft" sx={{ bgcolor: "background.level1" }}>
           <Divider inset="context" />
           <CardContent orientation="horizontal">
+            <img
+              src={`https://s2.googleusercontent.com/s2/favicons?domain_url=${
+                props.articleSource.url
+              }&sz=${20}`}
+            />
             <Typography
               level="body-xs"
               fontWeight="md"
               textColor="text.secondary"
             >
               <Skeleton loading={props.loading}>
-                {props.articleSource.name}
+                <a className={style.links} href={props.articleSource.url}>
+                  {props.articleSource.name}
+                </a>
               </Skeleton>
             </Typography>
             <Divider orientation="vertical" />
@@ -42,7 +58,16 @@ const SmallArticleCard = (props) => {
               fontWeight="md"
               textColor="text.secondary"
             >
-              <Skeleton loading={props.loading}>1 hour ago</Skeleton>
+              <Skeleton loading={props.loading}>
+                {props.publishedDuration / 60 < 1
+                  ? `${props.publishedDuration} minutes ago`
+                  : `${Math.floor(props.publishedDuration / 60)} 
+                      ${
+                        Math.floor(props.publishedDuration / 60) == 1
+                          ? "hour ago"
+                          : "hours ago"
+                      }`}
+              </Skeleton>
             </Typography>
           </CardContent>
         </CardOverflow>

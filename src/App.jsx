@@ -2,13 +2,14 @@ import React, { useState, useEffect } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { CssVarsProvider, extendTheme, useColorScheme } from "@mui/joy/styles";
 import Home from "./components/Home";
+import Search from "./components/Search";
 import Navbar from "./components/Navbar.jsx";
 import DarkMode from "@mui/icons-material/DarkMode";
 import { Sheet, Box } from "@mui/joy";
 import LightMode from "@mui/icons-material/LightMode.js";
 import { Switch } from "@mui/joy";
 import { getTopHeadlines, getCategory, getSearch } from "./api/gnews.js";
-import { newsData } from "./api/demoData.js";
+import { useLocation } from "react-router-dom";
 import "./App.css";
 
 import "@fontsource/inter";
@@ -66,96 +67,156 @@ const App = () => {
     "VITE_GNEWS_2",
     "VITE_GNEWS_3",
   ];
-  /* ========== local newsData For dev========== */
-  // useEffect(() => {
-  //   setArticles(newsData);
-  // }, []);
 
-  /* ==================================== */
+  const category = useLocation();
+
+  const dateToDuration = (date) => {
+    let currentDate = new Date().getTime();
+    let articleDate = new Date(date).getTime();
+    let duration = new Date(currentDate - articleDate);
+    let minutesAgo = duration / 1000 / 60;
+    return minutesAgo;
+  };
+
+  useEffect(() => {
+    if (category.pathname !== "/") {
+      getCategoryData(category.pathname.replace("/", ""));
+    } else {
+      getTopHeadlineData();
+    }
+  }, []);
 
   const getTopHeadlineData = () => {
     setLoading(true);
     getTopHeadlines({
       country: "us",
       apiKey: import.meta.env[keyList[keyNumber]],
-    }).then((res) => {
-      if (res.status == 403) {
-        keyNumber === 3 ? setKeyNumber(0) : setKeyNumber(keyNumber++);
-      } else if (res.status == 200) {
-        setArticles(res.data.articles);
+    })
+      .then((res) => {
+        let articleList = res.data.articles;
+        console.log(articleList);
+        for (let articleIdx in res.data.articles) {
+          articleList[articleIdx].duration = dateToDuration(
+            articleList[articleIdx].publishedAt
+          );
+        }
+        setArticles(articleList);
         setLoading(false);
-      }
-    });
+      })
+      .catch((err) => {
+        if (err.response.status == 403) {
+          if (keyNumber == 3) {
+            setKeyNumber(0);
+            getTopHeadlineData();
+          } else {
+            setKeyNumber(keyNumber + 1);
+            getTopHeadlineData();
+          }
+        }
+      });
   };
-
-  useEffect(() => {
-    getTopHeadlineData();
-  }, []);
 
   const getCategoryData = (category) => {
     setLoading(true);
     getCategory({
       country: "us",
-      category: category,
+      category: category.toLowerCase(),
       apiKey: import.meta.env[keyList[keyNumber]],
-    }).then((res) => {
-      if (res.status == 403) {
-        keyNumber === 3 ? setKeyNumber(0) : setKeyNumber(keyNumber++);
-      } else if (res.status == 200) {
+    })
+      .then((res) => {
+        let articleList = res.data.articles;
+        for (let articleIdx in res.data.articles) {
+          articleList[articleIdx].duration = dateToDuration(
+            articleList[articleIdx].publishedAt
+          );
+        }
         setArticles(res.data.articles);
         setLoading(false);
-      }
-    });
+      })
+      .catch((err) => {
+        if (err.response.status == 403) {
+          if (keyNumber == 3) {
+            setKeyNumber(0);
+            getCategoryData();
+          } else {
+            setKeyNumber(keyNumber + 1);
+            getCategoryData();
+          }
+        }
+      });
   };
-  const getSearchData = () => {
+
+  const getSearchData = (searchQuery) => {
     setLoading(true);
     getSearch({
       country: "us",
-      q: "bitcoin",
+      q: searchQuery,
       apiKey: import.meta.env[keyList[keyNumber]],
-    }).then((res) => {
-      if (res.status == 403) {
-        keyNumber === 3 ? setKeyNumber(0) : setKeyNumber(keyNumber++);
-      } else if (res.status == 200) {
+    })
+      .then((res) => {
+        let articleList = res.data.articles;
+        for (let articleIdx in res.data.articles) {
+          articleList[articleIdx].duration = dateToDuration(
+            articleList[articleIdx].publishedAt
+          );
+        }
         setArticles(res.data.articles);
         setLoading(false);
-      }
-    });
+      })
+      .catch((err) => {
+        if (err.response.status == 403) {
+          if (keyNumber == 3) {
+            setKeyNumber(0);
+            getSearchData();
+          } else {
+            setKeyNumber(keyNumber + 1);
+            getSearchData();
+          }
+        }
+      });
   };
 
   return (
     <Sheet className="main-container">
       <CssVarsProvider theme={theme}>
-        <Router>
-          <Navbar
-            getTopHeadlineData={getTopHeadlineData}
-            getSearchData={getSearchData}
-          />
-          <Box className="body-container">
-            <Routes>
-              <Route
-                path="/"
-                element={
-                  <Home
-                    getCategoryData={getCategoryData}
-                    loading={loading}
-                    articles={articles}
-                  />
-                }
-              />
-              <Route
-                path="/:category"
-                element={
-                  <Home
-                    getCategoryData={getCategoryData}
-                    loading={loading}
-                    articles={articles}
-                  />
-                }
-              />
-            </Routes>
-          </Box>
-        </Router>
+        <Navbar
+          getTopHeadlineData={getTopHeadlineData}
+          getSearchData={getSearchData}
+        />
+        <Box className="body-container">
+          <Routes>
+            <Route
+              path="/"
+              element={
+                <Home
+                  getCategoryData={getCategoryData}
+                  loading={loading}
+                  articles={articles}
+                />
+              }
+            />
+            <Route
+              path="/category/:category"
+              element={
+                <Home
+                  getCategoryData={getCategoryData}
+                  loading={loading}
+                  articles={articles}
+                />
+              }
+            />
+            <Route
+              path="/search/:query"
+              element={
+                <Search
+                  getCategoryData={getCategoryData}
+                  loading={loading}
+                  articles={articles}
+                />
+              }
+            />
+          </Routes>
+        </Box>
       </CssVarsProvider>
     </Sheet>
   );

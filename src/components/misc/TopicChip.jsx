@@ -8,12 +8,12 @@ const TopicChip = (props) => {
 
   return (
     <>
-      <Link to={`/${props.name}`}>
+      <Link to={`/category/${props.name.toLowerCase()}`}>
         <Chip
-          onClick={() => props.getCategoryData(props.name)}
+          onClick={() => props.getCategoryData(props.name.toLowerCase())}
           className={style.chip}
           variant={
-            currentCategory.pathname == `/${props.name}`
+            currentCategory.pathname == `/category/${props.name.toLowerCase()}`
               ? "solid"
               : props.chipVariant
           }

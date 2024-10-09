@@ -19,3 +19,12 @@
     }
   }
 }
+
+.links {
+  color: unset;
+  text-decoration: none;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}

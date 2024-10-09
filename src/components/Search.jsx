@@ -1,6 +1,6 @@
 import React from "react";
 import Tabs from "@mui/joy/Tabs";
-
+import { useLocation } from "react-router-dom";
 // Icon packs
 import ScienceIcon from "@mui/icons-material/Science";
 import TrendingUpIcon from "@mui/icons-material/TrendingUp";
@@ -11,11 +11,12 @@ import MemoryIcon from "@mui/icons-material/Memory";
 import SpaIcon from "@mui/icons-material/Spa";
 // Components
 import TopicChip from "./misc/TopicChip.jsx";
-import HeadlineCard from "./misc/HeadlineCard.jsx";
 import SmallArticleCard from "./misc/SmallArticleCard.jsx";
 
 import style from "../styles/modules/Home.module.scss";
-const Home = (props) => {
+import { Typography } from "@mui/joy";
+const Search = (props) => {
+  const currentQuery = useLocation();
   const categories = [
     {
       categoryName: "Discover",
@@ -90,37 +91,28 @@ const Home = (props) => {
       </Tabs>
 
       <div className={style.homeBody}>
-        {props.articles.map((article, idx) => {
-          if (idx == 0) {
-            return (
-              <div className={style.headline} key={idx}>
-                <HeadlineCard
-                  loading={props.loading}
-                  articleTitle={article.title}
-                  articleImage={article.image}
-                  articleSource={article.source}
-                  articleContent={article.content}
-                  articleLink={article.url}
-                />
-              </div>
-            );
-          }
-        })}
+        <Typography
+          style={{
+            marginBottom: "20px",
+            alignSelf: "start",
+          }}
+          level="title-lg"
+          textColor="#fff"
+        >
+          Results for {currentQuery.pathname.replace("/search/", "")}
+        </Typography>
         <div className={style.articleCards}>
           {props.articles.map((article, idx) => {
-            if (idx !== 0) {
-              return (
-                <SmallArticleCard
-                  key={idx}
-                  loading={props.loading}
-                  articleTitle={article.title}
-                  articleImage={article.image}
-                  articleSource={article.source}
-                  articleLink={article.url}
-                  publishedDuration={article.duration}
-                />
-              );
-            }
+            return (
+              <SmallArticleCard
+                key={idx}
+                loading={props.loading}
+                articleTitle={article.title}
+                articleImage={article.image}
+                articleSource={article.source}
+                publishedDuration={article.duration}
+              />
+            );
           })}
         </div>
       </div>
@@ -128,4 +120,4 @@ const Home = (props) => {
   );
 };
 
-export default Home;
+export default Search;
